@@ -8,12 +8,51 @@ const values = [
 
 const valuesContainer = document.querySelector('.app--values');
 
-const desktopViewport = window.matchMedia("screen and (min-width: 500px)");
+const desktopViewport = window.matchMedia('screen and (min-width: 500px)');
+
+const drawValues = (isDesktop) => {
+    if (isDesktop) {
+        drawDesktopValues();
+    } else {
+        drawMobileValues();
+    }
+};
+
+const drawMobileValues = () => {
+    valuesContainer.innerHTML = "";
+
+    let list = document.createElement('ul');
+
+    values.forEach(value => {
+        let element = document.createElement('li');
+
+        let name = document.createElement('div');
+        name.innerHTML = `<strong>Name: </strong> ${value.name}`;
+
+        let calories = document.createElement('div');
+        calories.innerHTML = `<strong>Calories: </strong> ${value.calories}`;
+
+        let fat = document.createElement('div');
+        fat.innerHTML = `<strong>Fat: </strong> ${value.fat}`;
+
+        let carbs = document.createElement('div');
+        carbs.innerHTML = `<strong>Carbs: </strong> ${value.carbs}`;
+
+        element.appendChild(name);
+        element.appendChild(calories);
+        element.appendChild(fat);
+        element.appendChild(carbs);
+
+        list.appendChild(element);
+    });
+    valuesContainer.appendChild(list);
+};
 
 const drawDesktopValues = () => {
     valuesContainer.innerHTML = "";
 
     let table = document.createElement('table');
+
     let thead = document.createElement('thead');
     thead.innerHTML = "<tr><th>Name</th><th>Calories</th><th>Fat</th><th>Carbs</th></tr>";
 
@@ -30,5 +69,8 @@ const drawDesktopValues = () => {
     valuesContainer.appendChild(table);
 };
 
-drawDesktopValues();
+drawValues(desktopViewport.matches);
 
+desktopViewport.addListener(isDesktop => {
+    drawValues(isDesktop.matches);
+});
